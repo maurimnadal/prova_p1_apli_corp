@@ -1,62 +1,35 @@
-const EventModel = require("../models/event.model");
+const AuthService = require("../services/auth.service");
 
-class EventController {
-  static async listar(req, res) {
+class AuthController {
+  static async register(req, res) {
     try {
-      const eventos = await EventModel.listar();
-      res.json(eventos);
-    } catch (err) {
-      res.status(500).json({ error: "Erro ao listar eventos" });
-    }
-  }
+      const { name, email, password, role } = req.body;
 
-  static async buscarPorId(req, res) {
-    try {
-      const evento = await EventModel.buscarPorId(parseInt(req.params.id));
-      if (!evento) return res.status(404).json({ error: "Evento não encontrado" });
-      res.json(evento);
-    } catch (err) {
-      res.status(500).json({ error: "Erro ao buscar evento" });
-    }
-  }
-
-  static async criar(req, res) {
-    try {
-      const { titulo, descricao, data_evento } = req.body;
-      if (!titulo || !descricao || !data_evento) {
+      if (!name || !email || !password) {
         return res.status(400).json({ error: "Preencha todos os campos" });
       }
-      const novoEvento = await EventModel.criar({ titulo, descricao, data_evento });
-      res.status(201).json(novoEvento);
+
+      const newUser = await AuthService.register({ name, email, password, role });
+      res.status(201).json(newUser);
     } catch (err) {
-      res.status(500).json({ error: "Erro ao criar evento" });
+      res.status(400).json({ error: err.message || "Erro ao registrar usuário" });
     }
   }
 
-  static async atualizar(req, res) {
+  static async login(req, res) {
     try {
-      const { titulo, descricao, data_evento } = req.body;
-      const atualizado = await EventModel.atualizar(parseInt(req.params.id), {
-        titulo,
-        descricao,
-        data_evento,
-      });
-      if (!atualizado) return res.status(404).json({ error: "Evento não encontrado" });
-      res.json(atualizado);
-    } catch (err) {
-      res.status(500).json({ error: "Erro ao atualizar evento" });
-    }
-  }
+      const { email, password } = req.body;
 
-  static async remover(req, res) {
-    try {
-      const removido = await EventModel.remover(parseInt(req.params.id));
-      if (!removido) return res.status(404).json({ error: "Evento não encontrado" });
-      res.json({ message: "Evento removido", removido });
+      if (!email || !password) {
+        return res.status(400).json({ error: "Preencha email e senha" });
+      }
+
+      const { token } = await AuthService.login(email, password);
+      res.json({ token });
     } catch (err) {
-      res.status(500).json({ error: "Erro ao remover evento" });
+      res.status(401).json({ error: err.message || "Erro ao realizar login" });
     }
   }
 }
 
-module.exports = EventController;
+module.exports = AuthController;

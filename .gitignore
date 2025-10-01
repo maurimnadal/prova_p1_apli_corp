@@ -1,5 +1,3 @@
 # Dependências
 node_modules/
 
-# Arquivos de configuração sensíveis
-.env

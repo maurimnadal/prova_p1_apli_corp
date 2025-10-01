@@ -1,0 +1,135 @@
+### =======================
+### 1. Registro de Usuários
+### =======================
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Admin IFRS",
+  "email": "admin@ifrs.edu.br",
+  "password": "123456",
+  "role": "admin"
+}
+
+###
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "João Voluntário",
+  "email": "joao@ifrs.edu.br",
+  "password": "123456",
+  "role": "volunteer"
+}
+
+### =======================
+### 2. Login de Usuários
+### =======================
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@ifrs.edu.br",
+  "password": "123456"
+}
+
+### 
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "joao@ifrs.edu.br",
+  "password": "123456"
+}
+
+### 
+
+
+### =======================
+### 3. Listar Eventos (qualquer usuário)
+### =======================
+
+GET http://localhost:3000/events
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBpZnJzLmVkdS5iciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTM1OTkwOCwiZXhwIjoxNzU5MzYzNTA4fQ.WshBAZmh4Ippjv88reTXCTJJEWLCApkJE6wNuB8qiso   
+
+###
+
+GET http://localhost:3000/events/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc1OTM2MDAxMywiZXhwIjoxNzU5MzYzNjEzfQ.1i-MTwHhYLEvF8q27-e06KGmDDkkJqbsPrWbhak4kQ0
+
+### =======================
+### 4. Criar Evento (somente admin)
+### =======================
+
+POST http://localhost:3000/events
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBpZnJzLmVkdS5iciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTM1OTkwOCwiZXhwIjoxNzU5MzYzNTA4fQ.WshBAZmh4Ippjv88reTXCTJJEWLCApkJE6wNuB8qiso
+
+{
+  "title": "Campanha de Doação de Sangue",
+  "description": "Doe sangue e salve vidas",
+  "date": "2025-10-25",
+  "location": "Campus Central",
+  "max_volunteers": 100
+}
+
+###
+
+POST http://localhost:3000/events
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc1OTM2MDAxMywiZXhwIjoxNzU5MzYzNjEzfQ.1i-MTwHhYLEvF8q27-e06KGmDDkkJqbsPrWbhak4kQ0
+
+{
+  "title": "Tentativa Usuário Comum",
+  "description": "Não deve funcionar",
+  "date": "2025-10-30",
+  "location": "Campus Secundário",
+  "max_volunteers": 50
+}
+
+### =======================
+### 5. Atualizar Evento (somente admin)
+### =======================
+
+PUT http://localhost:3000/events/4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBpZnJzLmVkdS5iciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTM1OTkwOCwiZXhwIjoxNzU5MzYzNTA4fQ.WshBAZmh4Ippjv88reTXCTJJEWLCApkJE6wNuB8qiso
+
+{
+  "title": "Campanha Atualizada",
+  "description": "Descrição atualizada",
+  "date": "2025-10-26",
+  "location": "Campus Central",
+  "max_volunteers": 120
+}
+
+###
+
+PUT http://localhost:3000/events/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc1OTM2MDAxMywiZXhwIjoxNzU5MzYzNjEzfQ.1i-MTwHhYLEvF8q27-e06KGmDDkkJqbsPrWbhak4kQ0
+
+{
+  "title": "Tentativa Usuário Comum",
+  "description": "Não deve atualizar",
+  "date": "2025-10-27",
+  "location": "Campus Secundário",
+  "max_volunteers": 50
+}
+
+### =======================
+### 6. Remover Evento (somente admin)
+### =======================
+
+DELETE http://localhost:3000/events/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBpZnJzLmVkdS5iciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTM1OTkwOCwiZXhwIjoxNzU5MzYzNTA4fQ.WshBAZmh4Ippjv88reTXCTJJEWLCApkJE6wNuB8qiso
+
+###
+
+DELETE http://localhost:3000/events/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc1OTM2MDAxMywiZXhwIjoxNzU5MzYzNjEzfQ.1i-MTwHhYLEvF8q27-e06KGmDDkkJqbsPrWbhak4kQ0
+

@@ -2,7 +2,11 @@ const pool = require("../config/db");
 
 class EventModel {
   static async listar() {
-    const [rows] = await pool.query("SELECT * FROM events");
+    const [rows] = await pool.query(`
+      SELECT e.*, u.name AS created_by_name
+      FROM events e
+      LEFT JOIN users u ON e.created_by = u.id
+    `);
     return rows;
   }
 
@@ -11,18 +15,18 @@ class EventModel {
     return rows[0];
   }
 
-  static async criar({ titulo, descricao, data_evento }) {
+  static async criar({ title, description, date, location, max_volunteers, created_by }) {
     const [result] = await pool.query(
-      "INSERT INTO events (titulo, descricao, data_evento) VALUES (?, ?, ?)",
-      [titulo, descricao, data_evento]
+      "INSERT INTO events (title, description, date, location, max_volunteers, created_by) VALUES (?, ?, ?, ?, ?, ?)",
+      [title, description, date, location, max_volunteers, created_by]
     );
-    return { id: result.insertId, titulo, descricao, data_evento };
+    return { id: result.insertId, title, description, date, location, max_volunteers, created_by };
   }
 
-  static async atualizar(id, { titulo, descricao, data_evento }) {
+  static async atualizar(id, { title, description, date, location, max_volunteers }) {
     await pool.query(
-      "UPDATE events SET titulo=?, descricao=?, data_evento=? WHERE id=?",
-      [titulo, descricao, data_evento, id]
+      "UPDATE events SET title=?, description=?, date=?, location=?, max_volunteers=? WHERE id=?",
+      [title, description, date, location, max_volunteers, id]
     );
     return this.buscarPorId(id);
   }

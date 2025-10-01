@@ -1,29 +1,30 @@
-/**
- * Model: users
- * Responsabilidade: operações CRUD diretas na tabela users
- */
 const pool = require("../config/db");
+const bcrypt = require("bcryptjs");
 
-module.exports = {
-  async findByEmail(email) {
+class UserModel {
+  static async criar({ name, email, password, role = "volunteer" }) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const [result] = await pool.query(
+      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+      [name, email, hashedPassword, role]
+    );
+
+    return { id: result.insertId, name, email, role };
+  }
+
+  static async buscarPorEmail(email) {
     const [rows] = await pool.query(
-      "SELECT id, name, email, password, role FROM users WHERE email = ?",
+      "SELECT * FROM users WHERE email = ?",
       [email]
     );
     return rows[0];
-  },
-  async findById(id) {
-    const [rows] = await pool.query(
-      "SELECT id, name, email, role FROM users WHERE id = ?",
-      [id]
-    );
-    return rows[0];
-  },
-  async create({ name, email, password, role = "volunteer" }) {
-    const [result] = await pool.query(
-      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-      [name, email, password, role]
-    );
-    return { id: result.insertId, name, email, role };
-  },
-};
+  }
+
+  static async validarSenha(user, password) {
+    return await bcrypt.compare(password, user.password);
+  }
+}
+
+module.exports = UserModel;
