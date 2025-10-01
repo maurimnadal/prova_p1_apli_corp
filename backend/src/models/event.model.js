@@ -1,32 +1,38 @@
-/**
- * Model: events
- */
 const pool = require("../config/db");
 
-module.exports = {
-  async findAll() {
-    const [rows] = await pool.query(
-      "SELECT id, title, description, date, location, max_volunteers, created_by, created_at FROM events ORDER BY date"
-    );
+class EventModel {
+  static async listar() {
+    const [rows] = await pool.query("SELECT * FROM events");
     return rows;
-  },
-  async findById(id) {
+  }
+
+  static async buscarPorId(id) {
     const [rows] = await pool.query("SELECT * FROM events WHERE id = ?", [id]);
     return rows[0];
-  },
-  async create(event) {
-    const {
-      title,
-      description,
-      date,
-      location,
-      max_volunteers = 50,
-      created_by,
-    } = event;
+  }
+
+  static async criar({ titulo, descricao, data_evento }) {
     const [result] = await pool.query(
-      "INSERT INTO events (title, description, date, location, max_volunteers, created_by) VALUES (?, ?, ?, ?, ?, ?)",
-      [title, description, date, location, max_volunteers, created_by]
+      "INSERT INTO events (titulo, descricao, data_evento) VALUES (?, ?, ?)",
+      [titulo, descricao, data_evento]
     );
-    return { id: result.insertId, ...event };
-  },
-};
+    return { id: result.insertId, titulo, descricao, data_evento };
+  }
+
+  static async atualizar(id, { titulo, descricao, data_evento }) {
+    await pool.query(
+      "UPDATE events SET titulo=?, descricao=?, data_evento=? WHERE id=?",
+      [titulo, descricao, data_evento, id]
+    );
+    return this.buscarPorId(id);
+  }
+
+  static async remover(id) {
+    const evento = await this.buscarPorId(id);
+    if (!evento) return null;
+    await pool.query("DELETE FROM events WHERE id=?", [id]);
+    return evento;
+  }
+}
+
+module.exports = EventModel;
