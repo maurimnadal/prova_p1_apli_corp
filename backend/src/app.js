@@ -24,10 +24,10 @@ app.get("/", (req, res) => {
 (async () => {
   try {
     const connection = await pool.getConnection();
-    console.log("Conectado ao MySQL ✅");
+    console.log("Conectado ao MySQL");
     connection.release();
   } catch (err) {
-    console.error("Erro ao conectar no MySQL ❌", err.message);
+    console.error("Erro ao conectar no MySQL", err.message);
   }
 })();
 
