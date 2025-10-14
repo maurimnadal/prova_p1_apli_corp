@@ -24,8 +24,8 @@ CREATE TABLE events (
 
 -- Dados fictícios
 INSERT INTO users (name, email, password, role) VALUES
-('Admin IFRS', 'admin@ifrs.edu.br', '$2a$10$EXEMPLOBCRYPTHASH', 'admin'),
-('João Voluntário', 'joao@ifrs.edu.br', '$2a$10$EXEMPLOBCRYPTHASH', 'volunteer');
+('Admin IFRS', 'admin@ifrs.edu.br', '123456', 'admin'),
+('João Voluntário', 'joao@ifrs.edu.br', '123456', 'volunteer');
 
 INSERT INTO events (title, description, date, location, max_volunteers, created_by) VALUES
 ('Campanha de Doação de Sangue', 'Doação de sangue no campus central', '2025-10-25', 'Campus Central', 100, 1),

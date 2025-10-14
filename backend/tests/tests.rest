@@ -36,7 +36,7 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### 
+###
 
 POST http://localhost:3000/auth/login
 Content-Type: application/json
@@ -46,28 +46,49 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### 
-
-
 ### =======================
-### 3. Listar Eventos (qualquer usuário)
+### 3. Dashboard (somente usuários autenticados)
 ### =======================
 
-GET http://localhost:3000/events
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBpZnJzLmVkdS5iciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTM1OTkwOCwiZXhwIjoxNzU5MzYzNTA4fQ.WshBAZmh4Ippjv88reTXCTJJEWLCApkJE6wNuB8qiso   
+GET http://localhost:3000/dashboard
+Authorization: Bearer {{ADMIN_TOKEN}}
 
 ###
 
-GET http://localhost:3000/events/5
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc1OTM2MDAxMywiZXhwIjoxNzU5MzYzNjEzfQ.1i-MTwHhYLEvF8q27-e06KGmDDkkJqbsPrWbhak4kQ0
+GET http://localhost:3000/dashboard
+Authorization: Bearer {{VOLUNTEER_TOKEN}}
 
 ### =======================
-### 4. Criar Evento (somente admin)
+### 4. Listar Eventos (qualquer usuário)
+### =======================
+
+GET http://localhost:3000/events
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+###
+
+GET http://localhost:3000/events
+Authorization: Bearer {{VOLUNTEER_TOKEN}}
+
+### =======================
+### 5. Buscar Evento por ID
+### =======================
+
+GET http://localhost:3000/events/1
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+###
+
+GET http://localhost:3000/events/1
+Authorization: Bearer {{VOLUNTEER_TOKEN}}
+
+### =======================
+### 6. Criar Evento (somente admin)
 ### =======================
 
 POST http://localhost:3000/events
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBpZnJzLmVkdS5iciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTM1OTkwOCwiZXhwIjoxNzU5MzYzNTA4fQ.WshBAZmh4Ippjv88reTXCTJJEWLCApkJE6wNuB8qiso
+Authorization: Bearer {{ADMIN_TOKEN}}
 
 {
   "title": "Campanha de Doação de Sangue",
@@ -81,7 +102,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiO
 
 POST http://localhost:3000/events
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc1OTM2MDAxMywiZXhwIjoxNzU5MzYzNjEzfQ.1i-MTwHhYLEvF8q27-e06KGmDDkkJqbsPrWbhak4kQ0
+Authorization: Bearer {{VOLUNTEER_TOKEN}}
 
 {
   "title": "Tentativa Usuário Comum",
@@ -92,12 +113,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiO
 }
 
 ### =======================
-### 5. Atualizar Evento (somente admin)
+### 7. Atualizar Evento (somente admin)
 ### =======================
 
-PUT http://localhost:3000/events/4
+PUT http://localhost:3000/events/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBpZnJzLmVkdS5iciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTM1OTkwOCwiZXhwIjoxNzU5MzYzNTA4fQ.WshBAZmh4Ippjv88reTXCTJJEWLCApkJE6wNuB8qiso
+Authorization: Bearer {{ADMIN_TOKEN}}
 
 {
   "title": "Campanha Atualizada",
@@ -111,7 +132,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiO
 
 PUT http://localhost:3000/events/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc1OTM2MDAxMywiZXhwIjoxNzU5MzYzNjEzfQ.1i-MTwHhYLEvF8q27-e06KGmDDkkJqbsPrWbhak4kQ0
+Authorization: Bearer {{VOLUNTEER_TOKEN}}
 
 {
   "title": "Tentativa Usuário Comum",
@@ -122,14 +143,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiO
 }
 
 ### =======================
-### 6. Remover Evento (somente admin)
+### 8. Remover Evento (somente admin)
 ### =======================
 
-DELETE http://localhost:3000/events/4
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbkBpZnJzLmVkdS5iciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTM1OTkwOCwiZXhwIjoxNzU5MzYzNTA4fQ.WshBAZmh4Ippjv88reTXCTJJEWLCApkJE6wNuB8qiso
+DELETE http://localhost:3000/events/1
+Authorization: Bearer {{ADMIN_TOKEN}}
 
 ###
 
-DELETE http://localhost:3000/events/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc1OTM2MDAxMywiZXhwIjoxNzU5MzYzNjEzfQ.1i-MTwHhYLEvF8q27-e06KGmDDkkJqbsPrWbhak4kQ0
-
+DELETE http://localhost:3000/events/2
+Authorization: Bearer {{VOLUNTEER_TOKEN}}

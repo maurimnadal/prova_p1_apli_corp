@@ -1,3 +1,4 @@
+// src/app.js
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -5,6 +6,7 @@ const pool = require("./config/db");
 
 const authRoutes = require("./routes/auth.routes");
 const eventRoutes = require("./routes/event.routes");
+const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
 
@@ -14,6 +16,7 @@ app.use(bodyParser.json());
 // Rotas
 app.use("/auth", authRoutes);
 app.use("/events", eventRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 // Rota de teste
 app.get("/", (req, res) => {
@@ -24,10 +27,10 @@ app.get("/", (req, res) => {
 (async () => {
   try {
     const connection = await pool.getConnection();
-    console.log("Conectado ao MySQL");
+    console.log("Conectado ao MySQL ✅");
     connection.release();
   } catch (err) {
-    console.error("Erro ao conectar no MySQL", err.message);
+    console.error("Erro ao conectar no MySQL ❌", err.message);
   }
 })();
 
