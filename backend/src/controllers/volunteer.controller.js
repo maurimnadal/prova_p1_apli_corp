@@ -1,4 +1,110 @@
-// src/controllers/volunteer.controller.js
+/**
+ * @swagger
+ * tags:
+ *   name: Volunteers
+ *   description: Rotas para gerenciamento de voluntários
+ *
+ * /volunteers:
+ *   get:
+ *     summary: Lista todos os voluntários
+ *     tags: [Volunteers]
+ *     responses:
+ *       200:
+ *         description: Lista de voluntários retornada com sucesso
+ *       500:
+ *         description: Erro interno ao listar voluntários
+ *
+ *   post:
+ *     summary: Cria um novo voluntário
+ *     tags: [Volunteers]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: João da Silva
+ *               email:
+ *                 type: string
+ *                 example: joao@email.com
+ *               phone:
+ *                 type: string
+ *                 example: "(11) 99999-9999"
+ *     responses:
+ *       201:
+ *         description: Voluntário criado com sucesso
+ *       400:
+ *         description: Erro ao criar voluntário
+ *
+ * /volunteers/{id}:
+ *   get:
+ *     summary: Busca um voluntário pelo ID
+ *     tags: [Volunteers]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do voluntário
+ *     responses:
+ *       200:
+ *         description: Voluntário encontrado
+ *       404:
+ *         description: Voluntário não encontrado
+ *
+ *   put:
+ *     summary: Atualiza um voluntário existente
+ *     tags: [Volunteers]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do voluntário
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Maria Oliveira
+ *               email:
+ *                 type: string
+ *                 example: maria@email.com
+ *               phone:
+ *                 type: string
+ *                 example: "(21) 98888-7777"
+ *     responses:
+ *       200:
+ *         description: Voluntário atualizado com sucesso
+ *       400:
+ *         description: Erro ao atualizar voluntário
+ *
+ *   delete:
+ *     summary: Remove um voluntário
+ *     tags: [Volunteers]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do voluntário
+ *     responses:
+ *       200:
+ *         description: Voluntário removido com sucesso
+ *       404:
+ *         description: Voluntário não encontrado
+ */
+
 const VolunteerService = require("../services/volunteer.service");
 
 class VolunteerController {
