@@ -1,3 +1,4 @@
+/** EventModel - operações no banco relacionadas a eventos */
 const pool = require("../config/db");
 
 class EventModel {

@@ -14,16 +14,11 @@ export default function EventList({ showAdminActions = false, refreshTrigger = 0
     }
   };
 
-  useEffect(() => {
-    fetchEvents();
-  }, [refreshTrigger]);
+  useEffect(() => { fetchEvents(); }, [refreshTrigger]);
 
   const handleDelete = async (id) => {
-    const token = localStorage.getItem('token');
     try {
-      await api.delete(`/events/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/events/${id}`);
       fetchEvents();
     } catch (err) {
       setError('Erro ao remover evento');

@@ -1,3 +1,4 @@
+/** Auth Controller */
 const AuthService = require("../services/auth.service");
 
 class AuthController {

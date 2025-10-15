@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Auth endpoints
+ */
+
 const express = require("express");
 const AuthController = require("../controllers/auth.controller");
 

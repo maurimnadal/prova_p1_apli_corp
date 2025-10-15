@@ -1,3 +1,4 @@
+/** Event Service */
 const pool = require("../config/db");
 
 const EventService = {

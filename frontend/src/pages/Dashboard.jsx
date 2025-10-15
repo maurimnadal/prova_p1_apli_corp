@@ -1,25 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EventList from '../components/EventList';
 import EventForm from '../components/EventForm';
-import '../index.css';
+import api from '../api/api';
 
 export default function Dashboard() {
   const [refresh, setRefresh] = useState(0);
+  const [user, setUser] = useState({ name: '', role: 'volunteer' });
+  
+  const fetchUser = async () => {
+    try {
+      const res = await api.get('/dashboard');
+      setUser(res.data.user);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  const token = localStorage.getItem('token');
-  const userRole = token ? JSON.parse(atob(token.split('.')[1])).role : 'volunteer';
+  useEffect(() => { fetchUser(); }, []);
 
-  const handleRefresh = () => setRefresh((prev) => prev + 1);
+  const handleRefresh = () => setRefresh(prev => prev + 1);
 
   return (
     <div className="container">
-      <header>
-        <h1>Dashboard</h1>
-      </header>
-      <p>Bem-vindo(a) ({userRole})</p>
-
-      {userRole === 'admin' && <EventForm onSuccess={handleRefresh} />}
-      <EventList showAdminActions={userRole === 'admin'} refreshTrigger={refresh} />
+      <header><h1>Dashboard</h1></header>
+      <p>Bem-vindo(a) {user.name || user.email} ({user.role})</p>
+      {user.role === 'admin' && <EventForm onSuccess={handleRefresh} />}
+      <EventList showAdminActions={user.role === 'admin'} refreshTrigger={refresh} />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+/** Event Controller */
 const EventService = require("../services/event.service");
 
 class EventController {

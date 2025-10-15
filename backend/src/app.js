@@ -2,13 +2,21 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors"); // <- import CORS
 const pool = require("./config/db");
 
 const authRoutes = require("./routes/auth.routes");
 const eventRoutes = require("./routes/event.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
+const setupSwagger = require("./swagger");
 
 const app = express();
+
+// --- Configuração CORS ---
+app.use(cors({
+  origin: "http://localhost:5173", // substitua pelo front-end se mudar de porta
+  credentials: true, // permite envio de cookies/tokens se precisar
+}));
 
 // Middleware para parsing de JSON
 app.use(bodyParser.json());
@@ -17,6 +25,9 @@ app.use(bodyParser.json());
 app.use("/auth", authRoutes);
 app.use("/events", eventRoutes);
 app.use("/dashboard", dashboardRoutes);
+
+// Swagger docs
+setupSwagger(app);
 
 // Rota de teste
 app.get("/", (req, res) => {

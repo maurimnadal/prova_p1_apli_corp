@@ -1,9 +1,13 @@
+/** Auth Service */
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user.model");
 
 const JWT_SECRET = process.env.JWT_SECRET || "segredoSuperSecreto";
 
+/**
+ * AuthService - register and login users
+ */
 const AuthService = {
   register: async ({ name, email, password, role = "volunteer" }) => {
     if (!name || !email || !password) throw new Error("Preencha todos os campos");
@@ -22,8 +26,9 @@ const AuthService = {
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) throw new Error("Senha incorreta");
 
+    // Include id, name, email and role in token payload
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, name: user.name, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: "1h" }
     );

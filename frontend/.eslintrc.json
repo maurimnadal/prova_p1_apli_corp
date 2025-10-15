@@ -6,20 +6,21 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "prettier"
   ],
-  "plugins": ["react", "react-hooks", "prettier"],
+  "plugins": [
+    "react",
+    "react-hooks"
+  ],
   "parserOptions": {
-    "ecmaFeatures": { "jsx": true },
+    "ecmaFeatures": {
+      "jsx": true
+    },
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "rules": {
-    "prettier/prettier": ["error"],
     "react/react-in-jsx-scope": "off",
-    "no-unused-vars": "warn",
-    "no-console": "off"
-  },
-  "settings": { "react": { "version": "detect" } }
+    "no-unused-vars": "warn"
+  }
 }

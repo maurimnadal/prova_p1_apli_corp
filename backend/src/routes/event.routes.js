@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Events
+ *   description: Events endpoints
+ */
+
 const express = require("express");
 const EventController = require("../controllers/event.controller");
 const { authMiddleware, authorize } = require("../middlewares/auth.middleware");

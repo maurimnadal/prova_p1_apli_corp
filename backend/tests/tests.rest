@@ -1,7 +1,8 @@
-### =======================
-### 1. Registro de Usuários
-### =======================
+### -------------------------------
+### Usuários
+### -------------------------------
 
+# Registrar usuário (admin ou volunteer)
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
@@ -18,15 +19,15 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "name": "João Voluntário",
-  "email": "joao@ifrs.edu.br",
+  "name": "Voluntário Teste",
+  "email": "volunteer@ifrs.edu.br",
   "password": "123456",
   "role": "volunteer"
 }
 
-### =======================
-### 2. Login de Usuários
-### =======================
+### -------------------------------
+### Login
+### -------------------------------
 
 POST http://localhost:3000/auth/login
 Content-Type: application/json
@@ -42,114 +43,55 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "joao@ifrs.edu.br",
+  "email": "volunteer@ifrs.edu.br",
   "password": "123456"
 }
 
-### =======================
-### 3. Dashboard (somente usuários autenticados)
-### =======================
+### -------------------------------
+### Dashboard (protegido)
+### -------------------------------
 
 GET http://localhost:3000/dashboard
-Authorization: Bearer {{ADMIN_TOKEN}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNDk0NDIzLCJleHAiOjE3NjA0OTgwMjN9.NVnhKQeGPwD-U5MBHdN4ymXQ5_vewdcoxfhj6XXpj2g
 
-###
+### -------------------------------
+### Eventos
+### -------------------------------
 
-GET http://localhost:3000/dashboard
-Authorization: Bearer {{VOLUNTEER_TOKEN}}
-
-### =======================
-### 4. Listar Eventos (qualquer usuário)
-### =======================
-
+# Listar todos os eventos (qualquer usuário autenticado)
 GET http://localhost:3000/events
-Authorization: Bearer {{ADMIN_TOKEN}}
+Authorization: Bearer {{token}}
 
-###
-
-GET http://localhost:3000/events
-Authorization: Bearer {{VOLUNTEER_TOKEN}}
-
-### =======================
-### 5. Buscar Evento por ID
-### =======================
-
+# Buscar evento por ID
 GET http://localhost:3000/events/1
-Authorization: Bearer {{ADMIN_TOKEN}}
+Authorization: Bearer {{token}}
 
-###
-
-GET http://localhost:3000/events/1
-Authorization: Bearer {{VOLUNTEER_TOKEN}}
-
-### =======================
-### 6. Criar Evento (somente admin)
-### =======================
-
+# Criar novo evento (admin apenas)
 POST http://localhost:3000/events
+Authorization: Bearer {{token}}
 Content-Type: application/json
-Authorization: Bearer {{ADMIN_TOKEN}}
 
 {
   "title": "Campanha de Doação de Sangue",
-  "description": "Doe sangue e salve vidas",
-  "date": "2025-10-25",
-  "location": "Campus Central",
+  "description": "Doe sangue e salve vidas!",
+  "date": "2025-11-20",
+  "location": "IFRS Campus",
+  "max_volunteers": 50
+}
+
+# Atualizar evento (admin apenas)
+PUT http://localhost:3000/events/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Campanha de Sangue Atualizada",
+  "description": "Descrição atualizada",
+  "date": "2025-11-25",
+  "location": "IFRS Campus Atualizado",
   "max_volunteers": 100
 }
 
-###
-
-POST http://localhost:3000/events
-Content-Type: application/json
-Authorization: Bearer {{VOLUNTEER_TOKEN}}
-
-{
-  "title": "Tentativa Usuário Comum",
-  "description": "Não deve funcionar",
-  "date": "2025-10-30",
-  "location": "Campus Secundário",
-  "max_volunteers": 50
-}
-
-### =======================
-### 7. Atualizar Evento (somente admin)
-### =======================
-
-PUT http://localhost:3000/events/1
-Content-Type: application/json
-Authorization: Bearer {{ADMIN_TOKEN}}
-
-{
-  "title": "Campanha Atualizada",
-  "description": "Descrição atualizada",
-  "date": "2025-10-26",
-  "location": "Campus Central",
-  "max_volunteers": 120
-}
-
-###
-
-PUT http://localhost:3000/events/1
-Content-Type: application/json
-Authorization: Bearer {{VOLUNTEER_TOKEN}}
-
-{
-  "title": "Tentativa Usuário Comum",
-  "description": "Não deve atualizar",
-  "date": "2025-10-27",
-  "location": "Campus Secundário",
-  "max_volunteers": 50
-}
-
-### =======================
-### 8. Remover Evento (somente admin)
-### =======================
-
+# Remover evento (admin apenas)
 DELETE http://localhost:3000/events/1
-Authorization: Bearer {{ADMIN_TOKEN}}
-
-###
-
-DELETE http://localhost:3000/events/2
-Authorization: Bearer {{VOLUNTEER_TOKEN}}
+Authorization: Bearer {{token}}

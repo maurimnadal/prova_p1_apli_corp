@@ -1,13 +1,17 @@
+/**
+ * Dashboard Controller
+ * Returns basic information about the authenticated user.
+ */
+
 const DashboardController = {
   acessar: async (req, res) => {
     try {
-      // req.user é preenchido pelo authMiddleware
-      const user = req.user;
+      const user = req.user || {};
       res.json({
-        message: `Bem-vindo ao dashboard, ${user.name}!`,
+        message: `Bem-vindo ao dashboard, ${user.name || user.email}!`,
         user: {
           id: user.id,
-          name: user.name,
+          name: user.name || null,
           email: user.email,
           role: user.role,
         },
