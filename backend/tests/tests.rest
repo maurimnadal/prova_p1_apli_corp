@@ -20,8 +20,8 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "name": "Voluntário IFRS",
-  "email": "voluntario1@ifrs.edu.br",
+  "name": "João Voluntário",
+  "email": "joao@ifrs.edu.br",
   "password": "123456",
   "role": "volunteer"
 }
@@ -44,8 +44,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "voluntario@ifrs.edu.br",
-  "password": "123456"
+  "email": "voluntario1@ifrs.edu.br",
+  "password": "senha123"
 }
 
 ### =======================
@@ -119,14 +119,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 ###
 
 # Atualizar voluntário (Admin ou voluntário)
-PUT http://localhost:3000/volunteers/10
+PUT http://localhost:3000/volunteers/5
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsIm5hbWUiOiJWb2x1bnTDoXJpbyBJRlJTIiwiZW1haWwiOiJ2b2x1bnRhcmlvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc2MDU0NjQ4MiwiZXhwIjoxNzYwNTUwMDgyfQ.pT9T-yi3Rc2okX5yzUmn2wP5HUIaxMO3Unm0piYjSb8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Ikpvw6NvIFZvbHVudMOhcmlvIiwiZW1haWwiOiJqb2FvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc2MDU2NTg1NiwiZXhwIjoxNzYwNTY5NDU2fQ.RsXs6K9pxctkErnxHJtfVQnSMm5QTwVQ0Ykjmx5ed1A
 
 {
   "name": "Voluntario Atualizado",
-  "email": "voluntario@ifrs.edu.br",
-  "password": "novaSenha123"
+  "email": "voluntario1@ifrs.edu.br",
+  "password": "senha123"
 }
 
 ###

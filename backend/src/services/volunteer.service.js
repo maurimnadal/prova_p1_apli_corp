@@ -1,11 +1,8 @@
 // src/services/volunteer.service.js
 const VolunteerModel = require('../models/volunteer.model');
-const bcrypt = require('bcryptjs');
 
 const VolunteerService = {
-  listar: async () => {
-    return VolunteerModel.listar();
-  },
+  listar: async () => VolunteerModel.listar(),
 
   buscarPorId: async (id) => {
     const volunteer = await VolunteerModel.buscarPorId(id);
@@ -14,12 +11,13 @@ const VolunteerService = {
   },
 
   criar: async ({ name, email, password, role }) => {
-    if (!name || !email || !password) throw new Error('Preencha todos os campos');
+    if (!name || !email || !password)
+      throw new Error('Preencha todos os campos');
     return VolunteerModel.criar({ name, email, password, role });
   },
 
   atualizar: async (id, data, usuario) => {
-    // 🔒 Permitir apenas admin ou o próprio voluntário editar
+    // 🔒 Apenas admin ou o próprio voluntário
     if (usuario.role !== 'admin' && usuario.id !== parseInt(id)) {
       throw new Error('Acesso negado: você só pode editar o próprio perfil');
     }
@@ -31,7 +29,7 @@ const VolunteerService = {
     };
 
     if (data.password) {
-      dadosAtualizados.password = await bcrypt.hash(data.password, 10);
+      dadosAtualizados.password = data.password; // deixa o model hashear
     }
 
     return VolunteerModel.atualizar(id, dadosAtualizados);
