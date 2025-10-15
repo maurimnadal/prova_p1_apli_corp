@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/", authMiddleware, VolunteerController.listar);
 router.get("/:id", authMiddleware, VolunteerController.buscarPorId);
 router.post("/", authMiddleware, authorize(["admin"]), VolunteerController.criar);
-router.put("/:id", authMiddleware, authorize(["admin"]), VolunteerController.atualizar);
+router.put("/:id", authMiddleware, VolunteerController.atualizar);
 router.delete("/:id", authMiddleware, authorize(["admin"]), VolunteerController.remover);
 
 module.exports = router;

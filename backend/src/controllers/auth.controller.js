@@ -33,7 +33,7 @@
  *                 description: Senha do usuário
  *               role:
  *                 type: string
- *                 description: Papel do usuário (ex: admin, volunteer)
+ *                 description: "Papel do usuário (ex: admin, volunteer)"
  *     responses:
  *       201:
  *         description: Usuário registrado com sucesso

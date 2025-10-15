@@ -138,13 +138,18 @@ class VolunteerController {
 
   static async atualizar(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      const updatedVolunteer = await VolunteerService.atualizar(id, req.body);
-      res.json(updatedVolunteer);
+      const id = req.params.id;
+      const usuario = req.user; // vem do JWT
+      const data = req.body;
+
+      const voluntarioAtualizado = await VolunteerService.atualizar(id, data, usuario);
+      res.json(voluntarioAtualizado);
     } catch (err) {
       res.status(400).json({ error: err.message });
     }
   }
+
+
 
   static async remover(req, res) {
     try {

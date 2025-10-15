@@ -28,9 +28,9 @@ class VolunteerModel {
     return { id: result.insertId, name, email, role };
   }
 
-  static async atualizar(id, { name, email, role, password }) {
-    let query = "UPDATE users SET name=?, email=?, role=?";
-    const params = [name, email, role];
+  static async atualizar(id, { name, email, password }) {
+    let query = "UPDATE users SET name=?, email=?";
+    const params = [name, email];
 
     if (password) {
       const salt = await bcrypt.genSalt(10);
@@ -43,8 +43,15 @@ class VolunteerModel {
     params.push(id);
 
     await pool.query(query, params);
-    return this.buscarPorId(id);
+
+    // retorna sem a role
+    const [rows] = await pool.query(
+      "SELECT id, name, email FROM users WHERE id = ?",
+      [id]
+    );
+    return rows[0];
   }
+
 
   static async remover(id) {
     const volunteer = await this.buscarPorId(id);

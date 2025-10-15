@@ -1,4 +1,33 @@
+### =======================
 ### AUTHENTICATION
+### =======================
+
+# Criar usuário ADMIN
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Admin IFRS",
+  "email": "admin@ifrs.edu.br",
+  "password": "123456",
+  "role": "admin"
+}
+
+###
+
+# Criar usuário VOLUNTEER
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Voluntário IFRS",
+  "email": "voluntario1@ifrs.edu.br",
+  "password": "123456",
+  "role": "volunteer"
+}
+
+###
+
 # Login como admin
 POST http://localhost:3000/auth/login
 Content-Type: application/json
@@ -15,18 +44,18 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "volunteer@ifrs.edu.br",
+  "email": "voluntario@ifrs.edu.br",
   "password": "123456"
 }
 
-###
-
+### =======================
 ### EVENTS CRUD
+### =======================
 
 # Criar evento (Admin)
 POST http://localhost:3000/events
 Content-Type: application/json
-Authorization: Bearer {{TOKEN}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNTQ2MjMzLCJleHAiOjE3NjA1NDk4MzN9.t-Ngn1kjdxuiJxjiX96h5H-aIVeOPO-16f9D4hCUgZg
 
 {
   "title": "Campanha de Doação de Sangue",
@@ -40,14 +69,14 @@ Authorization: Bearer {{TOKEN}}
 
 # Listar eventos (qualquer usuário)
 GET http://localhost:3000/events
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNDk4NDQyLCJleHAiOjE3NjA1MDIwNDJ9.DytkRTMam8WuYV3SKrTbXJYH7rroDmZPjJxYRmmSpCc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsIm5hbWUiOiJWb2x1bnTDoXJpbyBJRlJTIiwiZW1haWwiOiJ2b2x1bnRhcmlvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc2MDU0NjQ4MiwiZXhwIjoxNzYwNTUwMDgyfQ.pT9T-yi3Rc2okX5yzUmn2wP5HUIaxMO3Unm0piYjSb8
 
 ###
 
 # Atualizar evento (Admin)
-PUT http://localhost:3000/events/1
+PUT http://localhost:3000/events/9
 Content-Type: application/json
-Authorization: Bearer {{TOKEN}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNTQ2MjMzLCJleHAiOjE3NjA1NDk4MzN9.t-Ngn1kjdxuiJxjiX96h5H-aIVeOPO-16f9D4hCUgZg
 
 {
   "title": "Campanha de Doação de Sangue Atualizada",
@@ -60,21 +89,23 @@ Authorization: Bearer {{TOKEN}}
 ###
 
 # Deletar evento (Admin)
-DELETE http://localhost:3000/events/1
-Authorization: Bearer {{TOKEN}}
+DELETE http://localhost:3000/events/9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNTQzMzM1LCJleHAiOjE3NjA1NDY5MzV9.kHwWPOq9zwfgHdVvtrwFTGkPu13rr63j1xVGuosiEq0
 
-###
+---
 
+### =======================
 ### VOLUNTEERS CRUD
+### =======================
 
 # Criar voluntário (Admin)
 POST http://localhost:3000/volunteers
 Content-Type: application/json
-Authorization: Bearer {{TOKEN}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNTQzMzM1LCJleHAiOjE3NjA1NDY5MzV9.kHwWPOq9zwfgHdVvtrwFTGkPu13rr63j1xVGuosiEq0
 
 {
   "name": "João Silva",
-  "email": "joao@ifrs.edu.br",
+  "email": "maria@ifrs.edu.br",
   "password": "senha123",
   "role": "volunteer"
 }
@@ -83,31 +114,33 @@ Authorization: Bearer {{TOKEN}}
 
 # Listar todos os voluntários (Admin)
 GET http://localhost:3000/volunteers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNDk4NDQyLCJleHAiOjE3NjA1MDIwNDJ9.DytkRTMam8WuYV3SKrTbXJYH7rroDmZPjJxYRmmSpCc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNTQzMzM1LCJleHAiOjE3NjA1NDY5MzV9.kHwWPOq9zwfgHdVvtrwFTGkPu13rr63j1xVGuosiEq0
 
 ###
 
-# Atualizar voluntário (Admin)
-PUT http://localhost:3000/volunteers/1
+# Atualizar voluntário (Admin ou voluntário)
+PUT http://localhost:3000/volunteers/10
 Content-Type: application/json
-Authorization: Bearer {{TOKEN}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsIm5hbWUiOiJWb2x1bnTDoXJpbyBJRlJTIiwiZW1haWwiOiJ2b2x1bnRhcmlvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc2MDU0NjQ4MiwiZXhwIjoxNzYwNTUwMDgyfQ.pT9T-yi3Rc2okX5yzUmn2wP5HUIaxMO3Unm0piYjSb8
 
 {
-  "name": "João Silva Atualizado",
-  "email": "joao@ifrs.edu.br",
-  "role": "volunteer",
+  "name": "Voluntario Atualizado",
+  "email": "voluntario@ifrs.edu.br",
   "password": "novaSenha123"
 }
 
 ###
 
 # Deletar voluntário (Admin)
-DELETE http://localhost:3000/volunteers/1
-Authorization: Bearer {{TOKEN}}
+DELETE http://localhost:3000/volunteers/9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNTQzMzM1LCJleHAiOjE3NjA1NDY5MzV9.kHwWPOq9zwfgHdVvtrwFTGkPu13rr63j1xVGuosiEq0
 
-###
+---
 
+### =======================
 ### DASHBOARD
+### =======================
+
 # Acesso ao dashboard (usuário autenticado)
 GET http://localhost:3000/dashboard
-Authorization: Bearer {{TOKEN}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsIm5hbWUiOiJWb2x1bnTDoXJpbyBJRlJTIiwiZW1haWwiOiJ2b2x1bnRhcmlvQGlmcnMuZWR1LmJyIiwicm9sZSI6InZvbHVudGVlciIsImlhdCI6MTc2MDU0NjQ4MiwiZXhwIjoxNzYwNTUwMDgyfQ.pT9T-yi3Rc2okX5yzUmn2wP5HUIaxMO3Unm0piYjSb8
