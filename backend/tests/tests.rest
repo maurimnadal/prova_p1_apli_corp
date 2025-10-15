@@ -1,34 +1,5 @@
-### -------------------------------
-### Usuários
-### -------------------------------
-
-# Registrar usuário (admin ou volunteer)
-POST http://localhost:3000/auth/register
-Content-Type: application/json
-
-{
-  "name": "Admin IFRS",
-  "email": "admin@ifrs.edu.br",
-  "password": "123456",
-  "role": "admin"
-}
-
-###
-
-POST http://localhost:3000/auth/register
-Content-Type: application/json
-
-{
-  "name": "Voluntário Teste",
-  "email": "volunteer@ifrs.edu.br",
-  "password": "123456",
-  "role": "volunteer"
-}
-
-### -------------------------------
-### Login
-### -------------------------------
-
+### AUTHENTICATION
+# Login como admin
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
@@ -39,6 +10,7 @@ Content-Type: application/json
 
 ###
 
+# Login como volunteer
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
@@ -47,51 +19,95 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### -------------------------------
-### Dashboard (protegido)
-### -------------------------------
+###
 
-GET http://localhost:3000/dashboard
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNDk0NDIzLCJleHAiOjE3NjA0OTgwMjN9.NVnhKQeGPwD-U5MBHdN4ymXQ5_vewdcoxfhj6XXpj2g
+### EVENTS CRUD
 
-### -------------------------------
-### Eventos
-### -------------------------------
-
-# Listar todos os eventos (qualquer usuário autenticado)
-GET http://localhost:3000/events
-Authorization: Bearer {{token}}
-
-# Buscar evento por ID
-GET http://localhost:3000/events/1
-Authorization: Bearer {{token}}
-
-# Criar novo evento (admin apenas)
+# Criar evento (Admin)
 POST http://localhost:3000/events
-Authorization: Bearer {{token}}
 Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
 
 {
   "title": "Campanha de Doação de Sangue",
-  "description": "Doe sangue e salve vidas!",
-  "date": "2025-11-20",
-  "location": "IFRS Campus",
+  "description": "Doe sangue e salve vidas",
+  "date": "2025-12-01",
+  "location": "Campus IFRS",
   "max_volunteers": 50
 }
 
-# Atualizar evento (admin apenas)
+###
+
+# Listar eventos (qualquer usuário)
+GET http://localhost:3000/events
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNDk4NDQyLCJleHAiOjE3NjA1MDIwNDJ9.DytkRTMam8WuYV3SKrTbXJYH7rroDmZPjJxYRmmSpCc
+
+###
+
+# Atualizar evento (Admin)
 PUT http://localhost:3000/events/1
-Authorization: Bearer {{token}}
 Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
 
 {
-  "title": "Campanha de Sangue Atualizada",
+  "title": "Campanha de Doação de Sangue Atualizada",
   "description": "Descrição atualizada",
-  "date": "2025-11-25",
-  "location": "IFRS Campus Atualizado",
-  "max_volunteers": 100
+  "date": "2025-12-02",
+  "location": "Campus IFRS Bloco B",
+  "max_volunteers": 60
 }
 
-# Remover evento (admin apenas)
+###
+
+# Deletar evento (Admin)
 DELETE http://localhost:3000/events/1
-Authorization: Bearer {{token}}
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### VOLUNTEERS CRUD
+
+# Criar voluntário (Admin)
+POST http://localhost:3000/volunteers
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "João Silva",
+  "email": "joao@ifrs.edu.br",
+  "password": "senha123",
+  "role": "volunteer"
+}
+
+###
+
+# Listar todos os voluntários (Admin)
+GET http://localhost:3000/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkFkbWluIElGUlMiLCJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYwNDk4NDQyLCJleHAiOjE3NjA1MDIwNDJ9.DytkRTMam8WuYV3SKrTbXJYH7rroDmZPjJxYRmmSpCc
+
+###
+
+# Atualizar voluntário (Admin)
+PUT http://localhost:3000/volunteers/1
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "João Silva Atualizado",
+  "email": "joao@ifrs.edu.br",
+  "role": "volunteer",
+  "password": "novaSenha123"
+}
+
+###
+
+# Deletar voluntário (Admin)
+DELETE http://localhost:3000/volunteers/1
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### DASHBOARD
+# Acesso ao dashboard (usuário autenticado)
+GET http://localhost:3000/dashboard
+Authorization: Bearer {{TOKEN}}

@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Events from './pages/Events';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
+import Volunteers from "./pages/Volunteers";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/events" element={<Events />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/volunteers" element={<Volunteers />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

@@ -8,6 +8,7 @@ const pool = require("./config/db");
 const authRoutes = require("./routes/auth.routes");
 const eventRoutes = require("./routes/event.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
+const volunteerRoutes = require("./routes/volunteer.routes");
 const setupSwagger = require("./swagger");
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 app.use("/auth", authRoutes);
 app.use("/events", eventRoutes);
 app.use("/dashboard", dashboardRoutes);
+app.use("/volunteers", volunteerRoutes);
 
 // Swagger docs
 setupSwagger(app);

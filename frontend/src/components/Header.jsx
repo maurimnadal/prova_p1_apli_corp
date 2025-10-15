@@ -1,74 +1,59 @@
 // src/components/Header.jsx
-import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function Header() {
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
+        const payload = JSON.parse(atob(token.split(".")[1]));
         setUserRole(payload.role);
-      } catch (e) {
+      } catch {
         setUserRole(null);
       }
-    } else {
-      setUserRole(null);
     }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setUserRole(null);
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <header style={headerStyle}>
-      <nav style={navStyle}>
-        <Link to="/" style={linkStyle}>Home</Link>
-        <Link to="/events" style={linkStyle}>Eventos</Link>
-        {userRole && <Link to="/dashboard" style={linkStyle}>Dashboard</Link>}
-        {!userRole && <Link to="/login" style={linkStyle}>Login</Link>}
-        {userRole && <button onClick={handleLogout} style={logoutButtonStyle}>Logout</button>}
+      <h1 style={{ color: "#fff" }}>IFRS Voluntariado</h1>
+      <nav style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
+        <button style={buttonStyle} onClick={() => navigate("/")}>Home</button>
+        <button style={buttonStyle} onClick={() => navigate("/events")}>Eventos</button>
+        {userRole && <button style={buttonStyle} onClick={() => navigate("/dashboard")}>Dashboard</button>}
+        {userRole === "admin" && <button style={buttonStyle} onClick={() => navigate("/volunteers")}>Voluntários</button>}
+        {!userRole && <button style={buttonStyle} onClick={() => navigate("/login")}>Login</button>}
+        {userRole && <button style={{ ...buttonStyle, background: "#e74c3c" }} onClick={handleLogout}>Logout</button>}
       </nav>
     </header>
   );
 }
 
 const headerStyle = {
-  width: '100%',
-  background: '#3498db',
-  padding: '10px 20px',
-  display: 'flex',
-  justifyContent: 'center',
-  position: 'sticky',
-  top: 0,
-  zIndex: 1000,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  padding: "15px 30px",
+  background: "#3498db",
+  flexWrap: "wrap"
 };
 
-const navStyle = {
-  display: 'flex',
-  gap: '15px',
-  alignItems: 'center',
-};
-
-const linkStyle = {
-  color: '#fff',
-  textDecoration: 'none',
-  fontWeight: 'bold',
-  fontSize: '1rem',
-};
-
-const logoutButtonStyle = {
-  background: '#e74c3c',
-  color: '#fff',
-  border: 'none',
-  padding: '5px 10px',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  fontWeight: 'bold',
+const buttonStyle = {
+  padding: "8px 15px",
+  borderRadius: "5px",
+  border: "none",
+  cursor: "pointer",
+  background: "#2980b9",
+  color: "#fff",
+  fontSize: "1rem",
 };
