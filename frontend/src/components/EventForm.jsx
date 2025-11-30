@@ -6,7 +6,7 @@ export default function EventForm({ onSuccess }) {
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
-  const [maxVolunteers, setMaxVolunteers] = useState();
+  const [maxVolunteers, setMaxVolunteers] = useState(50);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -17,7 +17,13 @@ export default function EventForm({ onSuccess }) {
       return;
     }
     try {
-      await api.post('/events', { title, description, date, location, max_volunteers: maxVolunteers });
+      await api.post('/events', { 
+        title, 
+        description, 
+        date, 
+        location, 
+        max_volunteers: parseInt(maxVolunteers) || 50 
+      });
       setSuccess('Evento criado com sucesso!');
       setError('');
       setTitle(''); setDescription(''); setDate(''); setLocation(''); setMaxVolunteers(50);

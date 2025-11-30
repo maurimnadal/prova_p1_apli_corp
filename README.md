@@ -230,11 +230,6 @@ Utilize o arquivo `backend/tests/tests.rest` com a extensão REST Client do VS C
 - **Swagger UI**: Disponível em `/api-docs` quando o servidor estiver rodando
 - **JSDoc**: Documentação completa em Models, Services e Controllers
 - **Testes**: Exemplos completos em `tests.rest`
-- **Guias**: 
-  - `PRISMA_SETUP.md` - Setup do Prisma
-  - `WINSTON_SETUP.md` - Setup do Winston
-  - `TESTS_SETUP.md` - Setup dos testes
-  - `CHECKLIST_REQUISITOS.md` - Checklist completo
 
 ---
 
@@ -304,4 +299,3 @@ Utilize o arquivo `backend/tests/tests.rest` com a extensão REST Client do VS C
 - Clean Code
 - SOLID
 - RESTful APIs
-- Separation of Concerns

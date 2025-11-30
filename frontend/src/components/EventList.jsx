@@ -27,13 +27,20 @@ export default function EventList({ showAdminActions = false, refreshTrigger = 0
 
   const handleEdit = async (event) => {
     try {
+      const currentMaxVol = event.maxVolunteers || event.max_volunteers;
       const title = prompt('Título:', event.title) || event.title;
       const description = prompt('Descrição:', event.description) || event.description;
       const date = prompt('Data (YYYY-MM-DD):', event.date) || event.date;
       const location = prompt('Local:', event.location) || event.location;
-      const maxVolunteers = parseInt(prompt('Máx. voluntários:', event.max_volunteers), 10) || event.max_volunteers;
+      const maxVolunteers = parseInt(prompt('Máx. voluntários:', currentMaxVol), 10) || currentMaxVol;
 
-      await api.put(`/events/${event.id}`, { title, description, date, location, max_volunteers: maxVolunteers });
+      await api.put(`/events/${event.id}`, { 
+        title, 
+        description, 
+        date, 
+        location, 
+        max_volunteers: parseInt(maxVolunteers) || 50 
+      });
       fetchEvents();
     } catch (err) {
       setError('Erro ao atualizar evento');
@@ -42,6 +49,12 @@ export default function EventList({ showAdminActions = false, refreshTrigger = 0
 
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR');
+  };
+
   return (
     <ul style={listStyle}>
       {events.map((event) => (
@@ -49,9 +62,9 @@ export default function EventList({ showAdminActions = false, refreshTrigger = 0
           <div style={eventInfoStyle}>
             <strong>{event.title}</strong>
             <span>{event.description}</span>
-            <span>{event.date}</span>
-            <span>{event.location}</span>
-            <span>Máx. voluntários: {event.max_volunteers}</span>
+            <span>Data: {formatDate(event.date)}</span>
+            <span>Local: {event.location}</span>
+            <span>Máx. voluntários: {event.maxVolunteers || event.max_volunteers}</span>
           </div>
           {showAdminActions && (
             <div style={actionsStyle}>
