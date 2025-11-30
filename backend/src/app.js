@@ -2,8 +2,10 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors"); // <- import CORS
-const pool = require("./config/db");
+const cors = require("cors");
+const prisma = require("./config/prisma");
+const logger = require("./config/logger");
+const requestLogger = require("./middlewares/logger.middleware");
 
 const authRoutes = require("./routes/auth.routes");
 const eventRoutes = require("./routes/event.routes");
@@ -13,14 +15,17 @@ const setupSwagger = require("./swagger");
 
 const app = express();
 
-// --- Configuração CORS ---
+// Configuração CORS
 app.use(cors({
-  origin: "http://localhost:5173", // substitua pelo front-end se mudar de porta
-  credentials: true, // permite envio de cookies/tokens se precisar
+  origin: "http://localhost:5173",
+  credentials: true,
 }));
 
 // Middleware para parsing de JSON
 app.use(bodyParser.json());
+
+// Middleware de log de requisições
+app.use(requestLogger);
 
 // Rotas
 app.use("/auth", authRoutes);
@@ -36,15 +41,21 @@ app.get("/", (req, res) => {
   res.send("API funcionando 🚀");
 });
 
-// Testa conexão com o banco ao iniciar
+// Testa conexão com Prisma ao iniciar
 (async () => {
   try {
-    const connection = await pool.getConnection();
-    console.log("Conectado ao MySQL ✅");
-    connection.release();
+    await prisma.$connect();
+    logger.info('Conectado ao MySQL via Prisma');
+    console.log("Conectado ao MySQL via Prisma ✅");
   } catch (err) {
+    logger.error('Erro ao conectar no MySQL', { error: err.message });
     console.error("Erro ao conectar no MySQL ❌", err.message);
   }
 })();
+
+// Desconecta Prisma ao encerrar
+process.on('beforeExit', async () => {
+  await prisma.$disconnect();
+});
 
 module.exports = app;

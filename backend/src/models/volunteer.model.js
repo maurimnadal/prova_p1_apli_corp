@@ -1,62 +1,107 @@
-// src/models/volunteer.model.js
-const pool = require("../config/db");
+/**
+ * VolunteerModel - operações no banco relacionadas a voluntários
+ * @module models/VolunteerModel
+ */
+const prisma = require("../config/prisma");
 const bcrypt = require("bcryptjs");
 
+/**
+ * Classe responsável pelas operações de voluntários no banco de dados
+ */
 class VolunteerModel {
+  /**
+   * Lista todos os voluntários
+   * @returns {Promise<Array>} Lista de voluntários
+   */
   static async listar() {
-    const [rows] = await pool.query("SELECT id, name, email, role FROM users");
-    return rows;
+    return await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
   }
 
+  /**
+   * Busca um voluntário por ID
+   * @param {number} id - ID do voluntário
+   * @returns {Promise<Object|null>} Voluntário encontrado ou null
+   */
   static async buscarPorId(id) {
-    const [rows] = await pool.query(
-      "SELECT id, name, email, role FROM users WHERE id = ?",
-      [id]
-    );
-    return rows[0];
+    return await prisma.user.findUnique({
+      where: { id: parseInt(id) },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
   }
 
+  /**
+   * Cria um novo voluntário
+   * @param {Object} data - Dados do voluntário
+   * @returns {Promise<Object>} Voluntário criado
+   */
   static async criar({ name, email, password, role = "volunteer" }) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const [result] = await pool.query(
-      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-      [name, email, hashedPassword, role]
-    );
-
-    return { id: result.insertId, name, email, role };
+    return await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
   }
 
+  /**
+   * Atualiza um voluntário existente
+   * @param {number} id - ID do voluntário
+   * @param {Object} data - Dados a atualizar
+   * @returns {Promise<Object>} Voluntário atualizado
+   */
   static async atualizar(id, { name, email, password }) {
-    let query = "UPDATE users SET name=?, email=?";
-    const params = [name, email];
+    const updateData = { name, email };
 
     if (password) {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-      query += ", password=?";
-      params.push(hashedPassword);
+      updateData.password = await bcrypt.hash(password, 10);
     }
 
-    query += " WHERE id=?";
-    params.push(id);
-
-    await pool.query(query, params);
-
-    // retorna sem a role
-    const [rows] = await pool.query(
-      "SELECT id, name, email FROM users WHERE id = ?",
-      [id]
-    );
-    return rows[0];
+    return await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: updateData,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
   }
 
-
+  /**
+   * Remove um voluntário
+   * @param {number} id - ID do voluntário
+   * @returns {Promise<Object|null>} Voluntário removido ou null
+   */
   static async remover(id) {
     const volunteer = await this.buscarPorId(id);
     if (!volunteer) return null;
-    await pool.query("DELETE FROM users WHERE id=?", [id]);
+    
+    await prisma.user.delete({
+      where: { id: parseInt(id) },
+    });
+    
     return volunteer;
   }
 }

@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  email     String   @unique @db.VarChar(150)
+  password  String   @db.VarChar(255)
+  role      Role     @default(volunteer)
+  createdAt DateTime @default(now()) @map("created_at")
+  events    Event[]
+
+  @@map("users")
+}
+
+model Event {
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  description   String?  @db.Text
+  date          DateTime @db.Date
+  location      String?  @db.VarChar(255)
+  maxVolunteers Int      @default(50) @map("max_volunteers")
+  createdBy     Int?     @map("created_by")
+  createdAt     DateTime @default(now()) @map("created_at")
+  creator       User?    @relation(fields: [createdBy], references: [id])
+
+  @@map("events")
+}
+
+enum Role {
+  admin
+  volunteer
+}

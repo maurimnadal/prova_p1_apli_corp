@@ -20,9 +20,11 @@ Sistema web completo para gerenciamento de ações de voluntariado, permitindo o
 
 ### Backend
 - Node.js + Express
-- MySQL2 (conexão com banco)
+- Prisma ORM (banco de dados)
+- MySQL 8.0+
 - bcryptjs (hash de senhas)
 - jsonwebtoken (autenticação JWT)
+- Winston (logs estruturados)
 - swagger-jsdoc + swagger-ui-express (documentação)
 - cors, helmet (segurança)
 - dotenv (variáveis de ambiente)
@@ -32,6 +34,11 @@ Sistema web completo para gerenciamento de ações de voluntariado, permitindo o
 - Vite (build tool)
 - React Router DOM (roteamento)
 - Axios (requisições HTTP)
+
+### Testes
+- Jest (testes unitários)
+- Supertest (testes de integração)
+- Selenium WebDriver (testes E2E)
 
 ### Desenvolvimento
 - ESLint + Prettier (padronização de código)
@@ -44,8 +51,13 @@ Sistema web completo para gerenciamento de ações de voluntariado, permitindo o
 ```
 prova_p1_apli_corp/
 ├── backend/
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── seed.js
 │   ├── src/
-│   │   ├── config/db.js
+│   │   ├── config/
+│   │   │   ├── prisma.js
+│   │   │   └── logger.js
 │   │   ├── controllers/
 │   │   ├── services/
 │   │   ├── models/
@@ -54,7 +66,13 @@ prova_p1_apli_corp/
 │   │   ├── db/script.sql
 │   │   ├── app.js
 │   │   └── swagger.js
-│   ├── tests/tests.rest
+│   ├── tests/
+│   │   ├── unit/
+│   │   ├── integration/
+│   │   ├── e2e/
+│   │   └── tests.rest
+│   ├── logs/
+│   ├── jest.config.js
 │   ├── .env
 │   └── package.json
 ├── frontend/
@@ -79,14 +97,10 @@ prova_p1_apli_corp/
 
 ### 1. Configuração do Banco de Dados
 
-Execute o script SQL localizado em `backend/src/db/script.sql`:
+Crie o banco de dados MySQL:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS ifrs_voluntariado;
-USE ifrs_voluntariado;
-
--- Tabelas users e events serão criadas automaticamente
--- Dados fictícios incluídos para testes
 ```
 
 ### 2. Variáveis de Ambiente
@@ -100,6 +114,17 @@ DB_USER=root
 DB_PASSWORD=
 DB_NAME=ifrs_voluntariado
 JWT_SECRET=troque_esta_chave_por_uma_segura
+DATABASE_URL="mysql://root:@localhost:3306/ifrs_voluntariado"
+```
+
+### 3. Configurar Prisma
+
+```bash
+cd backend
+npm install
+npx prisma generate
+npx prisma migrate dev --name init
+npm run prisma:seed
 ```
 
 ---
@@ -110,11 +135,15 @@ JWT_SECRET=troque_esta_chave_por_uma_segura
 ```bash
 cd backend
 npm install
+npx prisma generate
+npx prisma migrate dev --name init
+npm run prisma:seed
 npm run dev
 ```
 
 - Servidor: `http://localhost:3000`
 - Swagger UI: `http://localhost:3000/api-docs`
+- Logs: `backend/logs/`
 
 ### Frontend
 ```bash
@@ -154,6 +183,26 @@ npm run dev
 
 ## 🧪 Testes
 
+### Testes Automatizados
+
+```bash
+cd backend
+
+# Todos os testes com cobertura
+npm test
+
+# Apenas testes unitários
+npm run test:unit
+
+# Apenas testes de integração
+npm run test:integration
+
+# Teste E2E (requer frontend rodando)
+npm run test:e2e
+```
+
+### Testes Manuais (REST Client)
+
 Utilize o arquivo `backend/tests/tests.rest` com a extensão REST Client do VS Code:
 
 1. Execute os requests de registro/login
@@ -179,8 +228,13 @@ Utilize o arquivo `backend/tests/tests.rest` com a extensão REST Client do VS C
 ## 📚 Documentação
 
 - **Swagger UI**: Disponível em `/api-docs` quando o servidor estiver rodando
-- **Código**: Comentários JSDoc nos controllers e services
+- **JSDoc**: Documentação completa em Models, Services e Controllers
 - **Testes**: Exemplos completos em `tests.rest`
+- **Guias**: 
+  - `PRISMA_SETUP.md` - Setup do Prisma
+  - `WINSTON_SETUP.md` - Setup do Winston
+  - `TESTS_SETUP.md` - Setup dos testes
+  - `CHECKLIST_REQUISITOS.md` - Checklist completo
 
 ---
 
@@ -189,6 +243,13 @@ Utilize o arquivo `backend/tests/tests.rest` com a extensão REST Client do VS C
 ### Backend
 - `npm start` - Produção
 - `npm run dev` - Desenvolvimento (nodemon)
+- `npm test` - Executar todos os testes
+- `npm run test:unit` - Testes unitários
+- `npm run test:integration` - Testes de integração
+- `npm run test:e2e` - Teste E2E
+- `npm run prisma:migrate` - Criar migration
+- `npm run prisma:seed` - Popular banco com dados
+- `npm run prisma:studio` - Interface visual do banco
 - `npm run lint` - Verificar código
 
 ### Frontend
@@ -207,3 +268,40 @@ Utilize o arquivo `backend/tests/tests.rest` com a extensão REST Client do VS C
 - CORS configurado
 - Helmet para headers de segurança
 - Validação de roles por endpoint
+
+---
+
+## 📊 Logs
+
+- Logs estruturados com Winston
+- Logs em arquivo: `logs/error.log` e `logs/combined.log`
+- Logs no console (desenvolvimento)
+- Log de todas as requisições HTTP
+- Níveis: error, warn, info
+
+---
+
+## 🗄️ Banco de Dados
+
+- ORM: Prisma
+- Banco: MySQL 8.0+
+- Migrations: Versionamento do schema
+- Seeds: Dados fictícios para testes
+- Models: User, Event
+
+---
+
+## 📖 Arquitetura
+
+### Camadas
+1. **Model** - Acesso ao banco (Prisma)
+2. **Service** - Lógica de negócio
+3. **Controller** - Requisições HTTP
+4. **Routes** - Definição de rotas
+5. **Middleware** - Autenticação, logs
+
+### Princípios
+- Clean Code
+- SOLID
+- RESTful APIs
+- Separation of Concerns

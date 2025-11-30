@@ -94,6 +94,7 @@
  */
 
 const AuthService = require("../services/auth.service");
+const logger = require("../config/logger");
 
 class AuthController {
   static async register(req, res) {
@@ -107,6 +108,7 @@ class AuthController {
       const newUser = await AuthService.register({ name, email, password, role });
       res.status(201).json(newUser);
     } catch (err) {
+      logger.error('Erro no registro de usuário', { error: err.message });
       res.status(400).json({ error: err.message || "Erro ao registrar usuário" });
     }
   }
@@ -122,6 +124,7 @@ class AuthController {
       const { token } = await AuthService.login(email, password);
       res.json({ token });
     } catch (err) {
+      logger.error('Erro no login', { error: err.message });
       res.status(401).json({ error: err.message || "Erro ao realizar login" });
     }
   }

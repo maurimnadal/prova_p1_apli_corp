@@ -1,51 +1,54 @@
-/** Event Service */
-const pool = require("../config/db");
+/**
+ * Event Service - Lógica de negócio para eventos
+ * @module services/EventService
+ */
+const EventModel = require("../models/event.model");
+const logger = require("../config/logger");
 
 const EventService = {
   listar: async () => {
-    const [rows] = await pool.query(`
-      SELECT e.*, u.name AS created_by_name
-      FROM events e
-      LEFT JOIN users u ON e.created_by = u.id
-      ORDER BY e.date ASC
-    `);
-    return rows;
+    logger.info('Listando todos os eventos');
+    return await EventModel.listar();
   },
 
   buscarPorId: async (id) => {
-    const [rows] = await pool.query("SELECT * FROM events WHERE id = ?", [id]);
-    return rows[0];
+    logger.info('Buscando evento por ID', { eventId: id });
+    return await EventModel.buscarPorId(id);
   },
 
   criar: async ({ title, description, date, location, max_volunteers = 50, created_by }) => {
-    if (!title || !date) throw new Error("Preencha os campos obrigatórios");
+    if (!title || !date) {
+      logger.warn('Tentativa de criar evento sem campos obrigatórios');
+      throw new Error("Preencha os campos obrigatórios");
+    }
 
-    const [result] = await pool.query(
-      "INSERT INTO events (title, description, date, location, max_volunteers, created_by) VALUES (?, ?, ?, ?, ?, ?)",
-      [title, description, date, location, max_volunteers, created_by]
-    );
-
-    return { id: result.insertId, title, description, date, location, max_volunteers, created_by };
+    const event = await EventModel.criar({ title, description, date, location, max_volunteers, created_by });
+    logger.info('Evento criado com sucesso', { eventId: event.id, title });
+    return event;
   },
 
   atualizar: async (id, { title, description, date, location, max_volunteers }) => {
-    const eventExist = await EventService.buscarPorId(id);
-    if (!eventExist) throw new Error("Evento não encontrado");
+    const eventExist = await EventModel.buscarPorId(id);
+    if (!eventExist) {
+      logger.warn('Tentativa de atualizar evento inexistente', { eventId: id });
+      throw new Error("Evento não encontrado");
+    }
 
-    await pool.query(
-      "UPDATE events SET title=?, description=?, date=?, location=?, max_volunteers=? WHERE id=?",
-      [title, description, date, location, max_volunteers, id]
-    );
-
-    return EventService.buscarPorId(id);
+    const updated = await EventModel.atualizar(id, { title, description, date, location, max_volunteers });
+    logger.info('Evento atualizado com sucesso', { eventId: id });
+    return updated;
   },
 
   remover: async (id) => {
-    const eventExist = await EventService.buscarPorId(id);
-    if (!eventExist) throw new Error("Evento não encontrado");
+    const eventExist = await EventModel.buscarPorId(id);
+    if (!eventExist) {
+      logger.warn('Tentativa de remover evento inexistente', { eventId: id });
+      throw new Error("Evento não encontrado");
+    }
 
-    await pool.query("DELETE FROM events WHERE id=?", [id]);
-    return eventExist;
+    const removed = await EventModel.remover(id);
+    logger.info('Evento removido com sucesso', { eventId: id });
+    return removed;
   },
 };
 
