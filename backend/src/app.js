@@ -1,4 +1,7 @@
-// src/app.js
+/**
+ * Configuração principal da aplicação Express
+ * @module app
+ */
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -39,6 +42,14 @@ setupSwagger(app);
 // Rota de teste
 app.get("/", (req, res) => {
   res.send("API funcionando 🚀");
+});
+
+// Middleware de tratamento de erros
+app.use((err, req, res, next) => {
+  logger.error('Erro não tratado', { error: err.message, stack: err.stack });
+  res.status(err.status || 500).json({ 
+    error: err.message || 'Erro interno do servidor' 
+  });
 });
 
 // Testa conexão com Prisma ao iniciar

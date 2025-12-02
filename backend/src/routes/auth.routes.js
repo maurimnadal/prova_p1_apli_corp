@@ -1,4 +1,7 @@
 /**
+ * Rotas de Autenticação
+ * @module routes/auth
+ * 
  * @swagger
  * tags:
  *   name: Auth
@@ -10,10 +13,14 @@ const AuthController = require("../controllers/auth.controller");
 
 const router = express.Router();
 
-// Registro de usuários
+/**
+ * POST /auth/register - Registra um novo usuário
+ */
 router.post("/register", AuthController.register);
 
-// Login
+/**
+ * POST /auth/login - Realiza login e retorna token JWT
+ */
 router.post("/login", AuthController.login);
 
 module.exports = router;

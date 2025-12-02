@@ -6,5 +6,6 @@ module.exports = {
     '!src/swagger.js',
   ],
   testMatch: ['**/tests/**/*.test.js'],
+  testPathIgnorePatterns: ['/node_modules/', '/tests/e2e/'],
   verbose: true,
 };

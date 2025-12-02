@@ -2,6 +2,26 @@
 import { useState, useEffect } from "react";
 import api from "../api/api";
 
+const errorStyle = {
+  backgroundColor: '#fee',
+  color: '#c00',
+  padding: '12px 15px',
+  borderRadius: '5px',
+  border: '1px solid #fcc',
+  marginBottom: '15px',
+  fontWeight: 'bold'
+};
+
+const successStyle = {
+  backgroundColor: '#efe',
+  color: '#060',
+  padding: '12px 15px',
+  borderRadius: '5px',
+  border: '1px solid #cfc',
+  marginBottom: '15px',
+  fontWeight: 'bold'
+};
+
 export default function VolunteerForm({ volunteer, onSuccess }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,6 +42,9 @@ export default function VolunteerForm({ volunteer, onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+    
     if (!name || !email || (!volunteer && !password)) {
       setError("Preencha todos os campos obrigatórios");
       return;
@@ -39,19 +62,19 @@ export default function VolunteerForm({ volunteer, onSuccess }) {
         });
         setSuccess("Voluntário criado com sucesso!");
       }
-      setError("");
       if (onSuccess) onSuccess();
     } catch (err) {
-      setError(err.response?.data?.error || "Erro ao salvar voluntário");
-      setSuccess("");
+      console.error('Erro ao salvar voluntário:', err);
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao salvar voluntário";
+      setError(errorMsg);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
       <h3>{volunteer ? "Editar Voluntário" : "Criar Voluntário"}</h3>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
+      {error && <div style={errorStyle}>{error}</div>}
+      {success && <div style={successStyle}>{success}</div>}
       <input placeholder="Nome" value={name} onChange={e => setName(e.target.value)} required />
       <input placeholder="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
       <input placeholder="Senha" type="password" value={password} onChange={e => setPassword(e.target.value)} required={!volunteer} />

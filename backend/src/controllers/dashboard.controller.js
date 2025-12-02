@@ -43,7 +43,16 @@
  */
 
 
+/**
+ * Controller para gerenciar o dashboard
+ * @class DashboardController
+ */
 const DashboardController = {
+  /**
+   * Retorna informações do usuário autenticado
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   acessar: async (req, res) => {
     try {
       const user = req.user || {};

@@ -96,7 +96,16 @@
 const AuthService = require("../services/auth.service");
 const logger = require("../config/logger");
 
+/**
+ * Controller para autenticação e registro de usuários
+ * @class AuthController
+ */
 class AuthController {
+  /**
+   * Registra um novo usuário
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async register(req, res) {
     try {
       const { name, email, password, role } = req.body;
@@ -113,19 +122,25 @@ class AuthController {
     }
   }
 
+  /**
+   * Realiza login de usuário
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async login(req, res) {
     try {
       const { email, password } = req.body;
 
       if (!email || !password) {
+        logger.warn('Login sem email ou senha');
         return res.status(400).json({ error: "Preencha email e senha" });
       }
 
       const { token } = await AuthService.login(email, password);
-      res.json({ token });
+      res.status(200).json({ token });
     } catch (err) {
-      logger.error('Erro no login', { error: err.message });
-      res.status(401).json({ error: err.message || "Erro ao realizar login" });
+      logger.error('Erro no login', { error: err.message, email: req.body.email });
+      return res.status(401).json({ error: err.message || "Erro ao realizar login" });
     }
   }
 }

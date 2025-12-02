@@ -1,14 +1,15 @@
-// src/routes/volunteer.routes.js
+/**
+ * Rotas de Voluntários
+ * @module routes/volunteers
+ * 
+ * Todas as rotas são protegidas por autenticação
+ * Apenas admin pode criar e remover
+ */
 const express = require("express");
 const VolunteerController = require("../controllers/volunteer.controller");
 const { authMiddleware, authorize } = require("../middlewares/auth.middleware");
 
 const router = express.Router();
-
-/**
- * Todas as rotas de volunteer são protegidas
- * Apenas admin pode criar, atualizar ou remover
- */
 router.get("/", authMiddleware, VolunteerController.listar);
 router.get("/:id", authMiddleware, VolunteerController.buscarPorId);
 router.post("/", authMiddleware, authorize(["admin"]), VolunteerController.criar);

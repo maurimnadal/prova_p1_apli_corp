@@ -1,4 +1,7 @@
-// src/swagger.js
+/**
+ * Configuração do Swagger para documentação da API
+ * @module swagger
+ */
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const path = require("path");

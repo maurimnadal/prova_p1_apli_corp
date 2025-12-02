@@ -4,16 +4,28 @@ const chrome = require('selenium-webdriver/chrome');
 async function testLogin() {
   console.log('🚀 Iniciando teste E2E de Login...\n');
 
-  const options = new chrome.Options();
-  options.addArguments('--headless');
-  options.addArguments('--disable-gpu');
-  options.addArguments('--no-sandbox');
-
   let driver;
+  let timeout;
 
   try {
+    timeout = setTimeout(() => {
+      console.error('\n❌ TIMEOUT: Teste demorou mais de 20 segundos\n');
+      process.exit(1);
+    }, 20000);
+
+    const service = new chrome.ServiceBuilder(
+      require('chromedriver').path
+    );
+    
+    const options = new chrome.Options();
+    options.addArguments('--headless');
+    options.addArguments('--disable-gpu');
+    options.addArguments('--no-sandbox');
+    options.addArguments('--disable-dev-shm-usage');
+    
     driver = await new Builder()
       .forBrowser('chrome')
+      .setChromeService(service)
       .setChromeOptions(options)
       .build();
 
@@ -37,26 +49,27 @@ async function testLogin() {
     await submitButton.click();
     console.log('✅ Botão de login clicado');
 
+    await driver.sleep(2000);
+    
     await driver.wait(until.urlContains('dashboard'), 10000);
     
     const currentUrl = await driver.getCurrentUrl();
     console.log(`✅ Redirecionado para: ${currentUrl}`);
-
-    if (currentUrl.includes('dashboard')) {
-      console.log('\n✅ TESTE E2E PASSOU: Login realizado com sucesso!\n');
-    } else {
-      console.log('\n❌ TESTE E2E FALHOU: Não foi redirecionado para dashboard\n');
-      process.exit(1);
-    }
+    console.log('\n✅ TESTE E2E PASSOU: Login realizado com sucesso!\n');
 
   } catch (error) {
     console.error('\n❌ ERRO NO TESTE E2E:', error.message);
-    console.log('\n⚠️  Certifique-se de que:');
-    console.log('   1. O backend está rodando em http://localhost:3000');
-    console.log('   2. O frontend está rodando em http://localhost:5173');
-    console.log('   3. O ChromeDriver está instalado\n');
+    if (error.message.includes('ChromeDriver')) {
+      console.log('\n⚠️  Problema com ChromeDriver. Tente:');
+      console.log('   npm install chromedriver --save-dev\n');
+    } else {
+      console.log('\n⚠️  Certifique-se de que:');
+      console.log('   1. O backend está rodando em http://localhost:3000');
+      console.log('   2. O frontend está rodando em http://localhost:5173\n');
+    }
     process.exit(1);
   } finally {
+    if (timeout) clearTimeout(timeout);
     if (driver) {
       await driver.quit();
       console.log('✅ Navegador fechado');
@@ -64,4 +77,7 @@ async function testLogin() {
   }
 }
 
-testLogin();
+testLogin().catch(err => {
+  console.error('❌ Erro fatal:', err.message);
+  process.exit(1);
+});

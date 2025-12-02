@@ -1,5 +1,15 @@
+/**
+ * Middleware para logging de requisições HTTP
+ * @module middlewares/requestLogger
+ */
 const logger = require('../config/logger');
 
+/**
+ * Middleware que registra informações de cada requisição HTTP
+ * @param {Object} req - Request do Express
+ * @param {Object} res - Response do Express
+ * @param {Function} next - Próxima função middleware
+ */
 const requestLogger = (req, res, next) => {
   const start = Date.now();
 

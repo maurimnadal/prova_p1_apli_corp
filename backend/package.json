@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^7.0.1",
+    "@prisma/client": "^5.22.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -31,7 +31,7 @@
     "hono": "^4.10.7",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.15.1",
-    "prisma": "^7.0.1",
+    "prisma": "^5.22.0",
     "sequelize": "^6.37.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "chromedriver": "^131.0.5",
+    "chromedriver": "^142.0.3",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",

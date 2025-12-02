@@ -184,7 +184,16 @@
 
 const EventService = require("../services/event.service");
 
+/**
+ * Controller para gerenciar eventos
+ * @class EventController
+ */
 class EventController {
+  /**
+   * Lista todos os eventos
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async listar(req, res) {
     try {
       const eventos = await EventService.listar();
@@ -194,6 +203,11 @@ class EventController {
     }
   }
 
+  /**
+   * Busca um evento por ID
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async buscarPorId(req, res) {
     try {
       const id = parseInt(req.params.id);
@@ -206,6 +220,11 @@ class EventController {
     }
   }
 
+  /**
+   * Cria um novo evento
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async criar(req, res) {
     try {
       const { title, description, date, location, max_volunteers } = req.body;
@@ -226,6 +245,11 @@ class EventController {
     }
   }
 
+  /**
+   * Atualiza um evento existente
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async atualizar(req, res) {
     try {
       const id = parseInt(req.params.id);
@@ -245,6 +269,11 @@ class EventController {
     }
   }
 
+  /**
+   * Remove um evento
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async remover(req, res) {
     try {
       const id = parseInt(req.params.id);

@@ -56,7 +56,7 @@ class EventModel {
       data: {
         title,
         description,
-        date: new Date(date),
+        date: new Date(date + 'T00:00:00'),
         location,
         maxVolunteers: max_volunteers,
         createdBy: created_by,
@@ -76,7 +76,7 @@ class EventModel {
       data: {
         title,
         description,
-        date: new Date(date),
+        date: new Date(date + 'T00:00:00'),
         location,
         maxVolunteers: max_volunteers,
       },

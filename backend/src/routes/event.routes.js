@@ -1,4 +1,7 @@
 /**
+ * Rotas de Eventos
+ * @module routes/events
+ * 
  * @swagger
  * tags:
  *   name: Events
@@ -11,19 +14,29 @@ const { authMiddleware, authorize } = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
-// Listar todos os eventos (qualquer usuário autenticado)
+/**
+ * GET /events - Lista todos os eventos (qualquer usuário autenticado)
+ */
 router.get("/", authMiddleware, EventController.listar);
 
-// Buscar evento por ID
+/**
+ * GET /events/:id - Busca evento por ID
+ */
 router.get("/:id", authMiddleware, EventController.buscarPorId);
 
-// Criar novo evento (apenas admin)
+/**
+ * POST /events - Cria novo evento (apenas admin)
+ */
 router.post("/", authMiddleware, authorize(["admin"]), EventController.criar);
 
-// Atualizar evento (apenas admin)
+/**
+ * PUT /events/:id - Atualiza evento (apenas admin)
+ */
 router.put("/:id", authMiddleware, authorize(["admin"]), EventController.atualizar);
 
-// Remover evento (apenas admin)
+/**
+ * DELETE /events/:id - Remove evento (apenas admin)
+ */
 router.delete("/:id", authMiddleware, authorize(["admin"]), EventController.remover);
 
 module.exports = router;

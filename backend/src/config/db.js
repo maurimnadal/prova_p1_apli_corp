@@ -1,6 +1,15 @@
+/**
+ * Configuração do pool de conexões MySQL
+ * @module config/db
+ * @deprecated Este arquivo não é mais usado - o projeto usa Prisma ORM
+ */
 const mysql = require("mysql2/promise");
 require("dotenv").config();
 
+/**
+ * Pool de conexões MySQL
+ * @type {mysql.Pool}
+ */
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "root",

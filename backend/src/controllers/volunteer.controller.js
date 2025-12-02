@@ -107,7 +107,16 @@
 
 const VolunteerService = require("../services/volunteer.service");
 
+/**
+ * Controller para gerenciar voluntários
+ * @class VolunteerController
+ */
 class VolunteerController {
+  /**
+   * Lista todos os voluntários
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async listar(req, res) {
     try {
       const volunteers = await VolunteerService.listar();
@@ -117,6 +126,11 @@ class VolunteerController {
     }
   }
 
+  /**
+   * Busca um voluntário por ID
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async buscarPorId(req, res) {
     try {
       const id = parseInt(req.params.id);
@@ -127,6 +141,11 @@ class VolunteerController {
     }
   }
 
+  /**
+   * Cria um novo voluntário
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async criar(req, res) {
     try {
       const newVolunteer = await VolunteerService.criar(req.body);
@@ -136,6 +155,11 @@ class VolunteerController {
     }
   }
 
+  /**
+   * Atualiza um voluntário existente
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async atualizar(req, res) {
     try {
       const id = req.params.id;
@@ -151,6 +175,11 @@ class VolunteerController {
 
 
 
+  /**
+   * Remove um voluntário
+   * @param {Object} req - Request do Express
+   * @param {Object} res - Response do Express
+   */
   static async remover(req, res) {
     try {
       const id = parseInt(req.params.id);

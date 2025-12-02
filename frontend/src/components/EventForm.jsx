@@ -1,6 +1,26 @@
 import { useState } from 'react';
 import api from '../api/api';
 
+const errorStyle = {
+  backgroundColor: '#fee',
+  color: '#c00',
+  padding: '12px 15px',
+  borderRadius: '5px',
+  border: '1px solid #fcc',
+  marginBottom: '15px',
+  fontWeight: 'bold'
+};
+
+const successStyle = {
+  backgroundColor: '#efe',
+  color: '#060',
+  padding: '12px 15px',
+  borderRadius: '5px',
+  border: '1px solid #cfc',
+  marginBottom: '15px',
+  fontWeight: 'bold'
+};
+
 export default function EventForm({ onSuccess }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -12,10 +32,14 @@ export default function EventForm({ onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+    
     if (!title || !description || !date || !location) {
       setError('Preencha todos os campos obrigatórios');
       return;
     }
+    
     try {
       await api.post('/events', { 
         title, 
@@ -25,20 +49,20 @@ export default function EventForm({ onSuccess }) {
         max_volunteers: parseInt(maxVolunteers) || 50 
       });
       setSuccess('Evento criado com sucesso!');
-      setError('');
       setTitle(''); setDescription(''); setDate(''); setLocation(''); setMaxVolunteers(50);
       if (onSuccess) onSuccess();
     } catch (err) {
-      setError(err.response?.data?.error || 'Erro ao criar evento');
-      setSuccess('');
+      console.error('Erro ao criar evento:', err);
+      const errorMsg = err.response?.data?.error || err.message || 'Erro ao criar evento';
+      setError(errorMsg);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h3>Criar Novo Evento</h3>
-      {error && <p style={{color:'red'}}>{error}</p>}
-      {success && <p style={{color:'green'}}>{success}</p>}
+      {error && <div style={errorStyle}>{error}</div>}
+      {success && <div style={successStyle}>{success}</div>}
       <input placeholder="Título" value={title} onChange={(e)=>setTitle(e.target.value)} required />
       <textarea placeholder="Descrição" value={description} onChange={(e)=>setDescription(e.target.value)} required />
       <input type="date" value={date} onChange={(e)=>setDate(e.target.value)} required />

@@ -1,3 +1,8 @@
+/**
+ * Ponto de entrada da aplicação
+ * Inicia o servidor Express
+ * @module index
+ */
 const app = require("./src/app");
 
 const PORT = process.env.PORT || 3000;

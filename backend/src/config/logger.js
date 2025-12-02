@@ -1,3 +1,7 @@
+/**
+ * Configuração do sistema de logs com Winston
+ * @module config/logger
+ */
 const winston = require('winston');
 const path = require('path');
 const fs = require('fs');
@@ -8,6 +12,12 @@ if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
+/**
+ * Logger configurado com Winston
+ * - Logs de erro em logs/error.log
+ * - Todos os logs em logs/combined.log
+ * - Console em desenvolvimento
+ */
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: winston.format.combine(
